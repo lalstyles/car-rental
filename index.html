@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveEasy Car Rentals — Book Your Ride in Minutes</title>
+<style>
+  :root{
+    --bg:#0d1b2a; --bg2:#1b263b; --accent:#ff6b35; --accent2:#ff8c42;
+    --text:#1a1a2e; --muted:#5c6b7a; --light:#f7f9fc; --white:#fff;
+    --radius:14px; --shadow:0 10px 30px rgba(13,27,42,.12);
+    --font:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--text);line-height:1.6;background:var(--white)}
+  a{text-decoration:none;color:inherit}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+  .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-weight:700;padding:14px 30px;border-radius:50px;border:none;cursor:pointer;
+    font-size:16px;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 18px rgba(255,107,53,.4)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,107,53,.5)}
+  .btn-ghost{background:transparent;border:2px solid #fff;box-shadow:none;color:#fff}
+  section{padding:80px 0}
+  h2{font-size:36px;text-align:center;margin-bottom:12px;color:var(--bg)}
+  .sub{text-align:center;color:var(--muted);max-width:640px;margin:0 auto 50px;font-size:17px}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:100;background:rgba(13,27,42,.95);backdrop-filter:blur(8px)}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1180px;margin:0 auto}
+  .logo{color:#fff;font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:30px;list-style:none}
+  .nav-links a{color:#dfe6ee;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-cta{padding:10px 22px;font-size:14px}
+  .menu-toggle{display:none;background:none;border:none;color:#fff;font-size:26px;cursor:pointer}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#0d1b2a 0%,#1b263b 60%,#2a3b52 100%);
+    color:#fff;position:relative;overflow:hidden;padding:90px 0 110px}
+  .hero::after{content:"";position:absolute;right:-120px;top:-60px;width:520px;height:520px;
+    background:radial-gradient(circle,rgba(255,107,53,.25),transparent 70%);border-radius:50%}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center;position:relative;z-index:2}
+  .hero h1{font-size:52px;line-height:1.1;margin-bottom:20px;font-weight:800}
+  .hero h1 em{color:var(--accent);font-style:normal}
+  .hero p{font-size:19px;color:#cdd7e2;margin-bottom:30px;max-width:520px}
+  .hero-stats{display:flex;gap:36px;margin-top:40px}
+  .hero-stats div{text-align:left}
+  .hero-stats b{display:block;font-size:30px;color:var(--accent)}
+  .hero-stats small{color:#aebccb;font-size:14px}
+  .hero-img{font-size:170px;text-align:center;line-height:1;filter:drop-shadow(0 20px 30px rgba(0,0,0,.4))}
+
+  /* BOOKING FORM */
+  .booking{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:28px;margin-top:-70px;position:relative;z-index:10}
+  .booking h3{color:var(--bg);font-size:20px;margin-bottom:18px}
+  .form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:13px;font-weight:600;color:var(--muted)}
+  .field input,.field select{padding:12px;border:1px solid #d8e0ea;border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
+  .booking .btn{width:100%}
+
+  /* FLEET */
+  .fleet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .car{background:var(--light);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    transition:transform .25s}
+  .car:hover{transform:translateY(-6px)}
+  .car-img{font-size:72px;text-align:center;padding:34px 0 14px;background:linear-gradient(135deg,#eef3fa,#dde7f4)}
+  .car-body{padding:22px}
+  .car-body h4{font-size:20px;margin-bottom:4px}
+  .car-tag{color:var(--muted);font-size:14px;margin-bottom:14px}
+  .car-specs{display:flex;gap:14px;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap}
+  .car-specs span{background:#e7eef7;padding:4px 10px;border-radius:20px}
+  .car-price{display:flex;align-items:baseline;justify-content:space-between}
+  .car-price b{font-size:26px;color:var(--accent)}
+  .car-price b small{font-size:14px;color:var(--muted);font-weight:400}
+
+  /* FEATURES */
+  .features{background:var(--light)}
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .feat{background:#fff;padding:30px 24px;border-radius:var(--radius);text-align:center;box-shadow:var(--shadow)}
+  .feat .ico{font-size:42px;margin-bottom:14px}
+  .feat h4{margin-bottom:8px;font-size:18px}
+  .feat p{color:var(--muted);font-size:15px}
+
+  /* STEPS */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .step{text-align:center;position:relative}
+  .step .num{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+  .step h4{margin-bottom:8px}
+  .step p{color:var(--muted)}
+
+  /* TESTIMONIALS */
+  .testi{background:var(--bg);color:#fff}
+  .testi h2{color:#fff}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .quote{background:var(--bg2);padding:28px;border-radius:var(--radius);border-left:4px solid var(--accent)}
+  .quote p{font-style:italic;color:#dfe6ee;margin-bottom:16px}
+  .quote .who{display:flex;align-items:center;gap:12px}
+  .quote .av{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;
+    align-items:center;justify-content:center;font-weight:700}
+  .quote .who b{display:block}
+  .quote .who small{color:#9fb0c2}
+  .stars{color:#ffc043;margin-bottom:10px}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-align:center}
+  .cta h2{color:#fff}
+  .cta p{color:#fff;max-width:560px;margin:0 auto 30px;font-size:18px}
+  .cta .btn{background:#fff;color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+  /* FOOTER */
+  footer{background:var(--bg);color:#aebccb;padding:50px 0 24px}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:30px;margin-bottom:30px}
+  footer h5{color:#fff;margin-bottom:14px;font-size:16px}
+  footer ul{list-style:none}
+  footer li{margin-bottom:8px;font-size:14px}
+  footer a:hover{color:var(--accent)}
+  .foot-bottom{border-top:1px solid #2a3b52;padding-top:20px;text-align:center;font-size:13px}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .hero-grid,.form-grid,.fleet-grid,.feat-grid,.steps-grid,.testi-grid,.foot-grid{grid-template-columns:1fr}
+    .hero h1{font-size:38px}
+    .hero-img{font-size:120px}
+    .form-grid{gap:14px}
+    .nav-links{display:none}
+    .menu-toggle{display:block}
+    .feat-grid{grid-template-columns:1fr 1fr}
+    section{padding:56px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <nav>
+    <div class="logo">🚗 Drive<span>Easy</span></div>
+    <ul class="nav-links">
+      <li><a href="#fleet">Our Fleet</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+    </ul>
+    <a href="#book" class="btn nav-cta">Book Now</a>
+    <button class="menu-toggle" onclick="document.querySelector('.nav-links').style.display=(this.dataset.o=='1'?'none':'flex');this.dataset.o=(this.dataset.o=='1'?'0':'1')">☰</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1>Rent the <em>perfect car</em> for every journey</h1>
+      <p>Premium vehicles, transparent pricing, and instant booking. Free cancellation, 24/7 roadside assistance, and no hidden fees — ever.</p>
+      <a href="#book" class="btn">Reserve Your Car →</a>
+      <a href="#fleet" class="btn btn-ghost" style="margin-left:12px">View Fleet</a>
+      <div class="hero-stats">
+        <div><b>500+</b><small>Cars available</small></div>
+        <div><b>50k+</b><small>Happy customers</small></div>
+        <div><b>4.9★</b><small>Average rating</small></div>
+      </div>
+    </div>
+    <div class="hero-img">🚙</div>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<div class="container" id="book">
+  <form class="booking" onsubmit="bookNow(event)">
+    <h3>🔎 Find your ideal rental</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>Pick-up location</label>
+        <input type="text" placeholder="City or airport" required>
+      </div>
+      <div class="field">
+        <label>Pick-up date</label>
+        <input type="date" required>
+      </div>
+      <div class="field">
+        <label>Return date</label>
+        <input type="date" required>
+      </div>
+      <div class="field">
+        <label>Vehicle type</label>
+        <select>
+          <option>Any type</option>
+          <option>Economy</option>
+          <option>SUV</option>
+          <option>Luxury</option>
+          <option>Van / 7-seater</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:18px"><button type="submit" class="btn">Search Available Cars</button></div>
+    <p id="book-msg" style="display:none;color:#1a7d3c;margin-top:14px;font-weight:600"></p>
+  </form>
+</div>
+
+<!-- FLEET -->
+<section id="fleet">
+  <div class="container">
+    <h2>Our Popular Fleet</h2>
+    <p class="sub">From budget-friendly economy cars to premium SUVs — find the right vehicle at the right price.</p>
+    <div class="fleet-grid">
+      <div class="car">
+        <div class="car-img">🚗</div>
+        <div class="car-body">
+          <h4>Toyota Corolla</h4>
+          <div class="car-tag">Economy · Great on fuel</div>
+          <div class="car-specs"><span>⛽ 45 mpg</span><span>👤 5 seats</span><span>⚙️ Auto</span></div>
+          <div class="car-price"><b>$39<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img">🚙</div>
+        <div class="car-body">
+          <h4>Honda CR-V</h4>
+          <div class="car-tag">SUV · Family favorite</div>
+          <div class="car-specs"><span>⛽ 32 mpg</span><span>👤 5 seats</span><span>🧳 Large boot</span></div>
+          <div class="car-price"><b>$65<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img">🏎️</div>
+        <div class="car-body">
+          <h4>BMW 5 Series</h4>
+          <div class="car-tag">Luxury · Premium comfort</div>
+          <div class="car-specs"><span>⚡ Turbo</span><span>👤 5 seats</span><span>🛋️ Leather</span></div>
+          <div class="car-price"><b>$129<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US / FEATURES -->
+<section class="features" id="why">
+  <div class="container">
+    <h2>Why Choose DriveEasy</h2>
+    <p class="sub">We make renting simple, fair, and stress-free.</p>
+    <div class="feat-grid">
+      <div class="feat"><div class="ico">💸</div><h4>No Hidden Fees</h4><p>The price you see is the price you pay. Always transparent.</p></div>
+      <div class="feat"><div class="ico">🔄</div><h4>Free Cancellation</h4><p>Plans change. Cancel up to 48 hours before pick-up, free.</p></div>
+      <div class="feat"><div class="ico">🛟</div><h4>24/7 Assistance</h4><p>Roadside support whenever and wherever you need it.</p></div>
+      <div class="feat"><div class="ico">⚡</div><h4>Instant Booking</h4><p>Confirm your car in under 2 minutes. No paperwork hassle.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <h2>How It Works</h2>
+    <p class="sub">Three simple steps to get you on the road.</p>
+    <div class="steps-grid">
+      <div class="step"><div class="num">1</div><h4>Choose Your Car</h4><p>Browse our fleet and pick the vehicle that fits your trip and budget.</p></div>
+      <div class="step"><div class="num">2</div><h4>Book in Minutes</h4><p>Enter your dates and details. Get instant confirmation by email.</p></div>
+      <div class="step"><div class="num">3</div><h4>Pick Up & Drive</h4><p>Collect your car at the agreed location and enjoy the journey.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="reviews">
+  <div class="container">
+    <h2>What Our Customers Say</h2>
+    <p class="sub" style="color:#aebccb">Trusted by over 50,000 drivers worldwide.</p>
+    <div class="testi-grid">
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"Booking took two minutes and the car was spotless. Best rental experience I've had."</p>
+        <div class="who"><div class="av">SM</div><div><b>Sarah M.</b><small>Business traveler</small></div></div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"No surprise charges at the desk. What they quoted is exactly what I paid. Refreshing!"</p>
+        <div class="who"><div class="av">DK</div><div><b>David K.</b><small>Family vacation</small></div></div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"My flight was delayed and they held the car with zero fuss. Customer service is top tier."</p>
+        <div class="who"><div class="av">AL</div><div><b>Aisha L.</b><small>Frequent renter</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Ready to Hit the Road?</h2>
+    <p>Reserve your car today and get 15% off your first rental with code <b>DRIVE15</b>.</p>
+    <a href="#book" class="btn">Book Your Car Now</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="margin-bottom:12px">🚗 Drive<span>Easy</span></div>
+        <p style="font-size:14px">Premium car rentals made simple. Drive more, worry less.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div><h5>Support</h5><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact</a></li><li><a href="#">Terms</a></li></ul></div>
+      <div><h5>Get in Touch</h5><ul><li>📞 1-800-DRIVE-EZ</li><li>✉️ hello@driveeasy.com</li><li>📍 Available in 40+ cities</li></ul></div>
+    </div>
+    <div class="foot-bottom">© 2026 DriveEasy Car Rentals. All rights reserved. · This is a sample landing page.<br>
+      <span style="color:#ff8c42;font-weight:600">Prepared by Jalal Antonio — Virtual Assistant · lalstyles1991@gmail.com · +63 991 008 2517</span></div>
+  </div>
+</footer>
+
+<script>
+function bookNow(e){
+  e.preventDefault();
+  var m=document.getElementById('book-msg');
+  m.style.display='block';
+  m.textContent='✅ Great! Searching available cars… (demo — this is where results or your CRM/booking integration would load).';
+  m.scrollIntoView({behavior:'smooth',block:'center'});
+}
+</script>
+</body>
+</html>
