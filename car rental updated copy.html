@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveEasy Car Rentals — Book Your Ride in Minutes</title>
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#1c1c1c; --accent:#ff2e88; --accent2:#ff6bb0;
+    --text:#1a1a1a; --muted:#777; --light:#fdf2f8; --white:#fff;
+    --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.18);
+    --font:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--text);line-height:1.6;background:var(--white)}
+  a{text-decoration:none;color:inherit}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+  .btn{display:inline-block;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-weight:700;padding:14px 30px;border-radius:50px;border:none;cursor:pointer;
+    font-size:16px;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 18px rgba(255,107,53,.4)}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(255,107,53,.5)}
+  .btn-ghost{background:transparent;border:2px solid #fff;box-shadow:none;color:#fff}
+  section{padding:80px 0}
+  h2{font-size:36px;text-align:center;margin-bottom:12px;color:var(--bg)}
+  .sub{text-align:center;color:var(--muted);max-width:640px;margin:0 auto 50px;font-size:17px}
+
+  /* NAV */
+  header{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.96);backdrop-filter:blur(8px)}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1180px;margin:0 auto}
+  .logo{color:#fff;font-size:24px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:30px;list-style:none}
+  .nav-links a{color:#dfe6ee;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-cta{padding:10px 22px;font-size:14px}
+  .menu-toggle{display:none;background:none;border:none;color:#fff;font-size:26px;cursor:pointer}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#000 0%,#1c1c1c 55%,#2a0a1c 100%);
+    color:#fff;position:relative;overflow:hidden;padding:90px 0 110px}
+  .hero::after{content:"";position:absolute;right:-120px;top:-60px;width:520px;height:520px;
+    background:radial-gradient(circle,rgba(255,46,136,.35),transparent 70%);border-radius:50%}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center;position:relative;z-index:2}
+  .hero h1{font-size:52px;line-height:1.1;margin-bottom:20px;font-weight:800}
+  .hero h1 em{color:var(--accent);font-style:normal}
+  .hero p{font-size:19px;color:#cdd7e2;margin-bottom:30px;max-width:520px}
+  .hero-stats{display:flex;gap:36px;margin-top:40px}
+  .hero-stats div{text-align:left}
+  .hero-stats b{display:block;font-size:30px;color:var(--accent)}
+  .hero-stats small{color:#aebccb;font-size:14px}
+  .hero-img{text-align:center;line-height:1}
+  .hero-img img{width:100%;max-width:560px;border-radius:18px;display:block;
+    box-shadow:0 24px 50px rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.08)}
+
+  /* BOOKING FORM */
+  .booking{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:28px;margin-top:-70px;position:relative;z-index:10}
+  .booking h3{color:var(--bg);font-size:20px;margin-bottom:18px}
+  .form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:13px;font-weight:600;color:var(--muted)}
+  .field input,.field select{padding:12px;border:1px solid #d8e0ea;border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
+  .booking .btn{width:100%}
+
+  /* FLEET */
+  .fleet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .car{background:var(--light);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+    transition:transform .25s}
+  .car:hover{transform:translateY(-6px)}
+  .car-img{height:190px;overflow:hidden;background:linear-gradient(135deg,#fce4ef,#fad0e4)}
+  .car-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+  .car:hover .car-img img{transform:scale(1.06)}
+  .car-img.fb{font-size:72px;text-align:center;padding:34px 0 14px;height:auto}
+  .car-body{padding:22px}
+  .car-body h4{font-size:20px;margin-bottom:4px}
+  .car-tag{color:var(--muted);font-size:14px;margin-bottom:14px}
+  .car-specs{display:flex;gap:14px;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap}
+  .car-specs span{background:#fbe0ee;padding:4px 10px;border-radius:20px}
+  .car-price{display:flex;align-items:baseline;justify-content:space-between}
+  .car-price b{font-size:26px;color:var(--accent)}
+  .car-price b small{font-size:14px;color:var(--muted);font-weight:400}
+
+  /* FEATURES */
+  .features{background:var(--light)}
+  .feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .feat{background:#fff;padding:30px 24px;border-radius:var(--radius);text-align:center;box-shadow:var(--shadow)}
+  .feat .ico{font-size:42px;margin-bottom:14px}
+  .feat h4{margin-bottom:8px;font-size:18px}
+  .feat p{color:var(--muted);font-size:15px}
+
+  /* STEPS */
+  .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+  .step{text-align:center;position:relative}
+  .step .num{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));
+    color:#fff;font-size:26px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+  .step h4{margin-bottom:8px}
+  .step p{color:var(--muted)}
+
+  /* TESTIMONIALS */
+  .testi{background:var(--bg);color:#fff}
+  .testi h2{color:#fff}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .quote{background:var(--bg2);padding:28px;border-radius:var(--radius);border-left:4px solid var(--accent)}
+  .quote p{font-style:italic;color:#dfe6ee;margin-bottom:16px}
+  .quote .who{display:flex;align-items:center;gap:12px}
+  .quote .av{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;
+    align-items:center;justify-content:center;font-weight:700}
+  .quote .who b{display:block}
+  .quote .who small{color:#9fb0c2}
+  .stars{color:#ffc043;margin-bottom:10px}
+
+  /* CTA */
+  .cta{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-align:center}
+  .cta h2{color:#fff}
+  .cta p{color:#fff;max-width:560px;margin:0 auto 30px;font-size:18px}
+  .cta .btn{background:#fff;color:var(--accent);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+
+  /* FOOTER */
+  footer{background:var(--bg);color:#aebccb;padding:50px 0 24px}
+  .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:30px;margin-bottom:30px}
+  footer h5{color:#fff;margin-bottom:14px;font-size:16px}
+  footer ul{list-style:none}
+  footer li{margin-bottom:8px;font-size:14px}
+  footer a:hover{color:var(--accent)}
+  .foot-bottom{border-top:1px solid #333;padding-top:20px;text-align:center;font-size:13px}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .hero-grid,.form-grid,.fleet-grid,.feat-grid,.steps-grid,.testi-grid,.foot-grid{grid-template-columns:1fr}
+    .hero h1{font-size:38px}
+    .hero-img img{max-width:100%}
+    .form-grid{gap:14px}
+    .nav-links{display:none}
+    .menu-toggle{display:block}
+    .feat-grid{grid-template-columns:1fr 1fr}
+    section{padding:56px 0}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <nav>
+    <div class="logo">🚗 Drive<span>Easy</span></div>
+    <ul class="nav-links">
+      <li><a href="#fleet">Our Fleet</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+    </ul>
+    <a href="#book" class="btn nav-cta">Book Now</a>
+    <button class="menu-toggle" onclick="document.querySelector('.nav-links').style.display=(this.dataset.o=='1'?'none':'flex');this.dataset.o=(this.dataset.o=='1'?'0':'1')">☰</button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <h1>Rent the <em>perfect car</em> for every journey</h1>
+      <p>Premium vehicles, transparent pricing, and instant booking. Free cancellation, 24/7 roadside assistance, and no hidden fees — ever.</p>
+      <a href="#book" class="btn">Reserve Your Car →</a>
+      <a href="#fleet" class="btn btn-ghost" style="margin-left:12px">View Fleet</a>
+      <div class="hero-stats">
+        <div><b>500+</b><small>Cars available</small></div>
+        <div><b>50k+</b><small>Happy customers</small></div>
+        <div><b>4.9★</b><small>Average rating</small></div>
+      </div>
+    </div>
+    <div class="hero-img"><img src="https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=1000&q=80&auto=format&fit=crop" alt="Modern car on the open road" onerror="this.parentElement.style.fontSize='170px';this.parentElement.textContent='🚙'"></div>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<div class="container" id="book">
+  <form class="booking" action="https://formspree.io/f/mojzjwvk" method="POST" onsubmit="bookNow(event)">
+    <h3>🔎 Find your ideal rental</h3>
+    <div class="form-grid">
+      <div class="field">
+        <label>Full name</label>
+        <input type="text" name="name" placeholder="Your full name" required>
+      </div>
+      <div class="field">
+        <label>Email address</label>
+        <input type="email" name="email" placeholder="you@email.com" required>
+      </div>
+      <div class="field">
+        <label>Phone number</label>
+        <input type="tel" name="phone" placeholder="+63 9XX XXX XXXX" required>
+      </div>
+      <div class="field">
+        <label>Pick-up location</label>
+        <input type="text" name="location" placeholder="City or airport" required>
+      </div>
+      <div class="field">
+        <label>Pick-up date</label>
+        <input type="date" name="pickup" required>
+      </div>
+      <div class="field">
+        <label>Return date</label>
+        <input type="date" name="return" required>
+      </div>
+      <div class="field">
+        <label>Vehicle type</label>
+        <select name="vehicle">
+          <option>Any type</option>
+          <option>Economy</option>
+          <option>SUV</option>
+          <option>Luxury</option>
+          <option>Van / 7-seater</option>
+          <option>Electric</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Message / notes</label>
+        <input type="text" name="message" placeholder="Tell us anything (optional)">
+      </div>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+      <button type="submit" class="btn" style="flex:1;min-width:200px">Send Booking Request</button>
+      <a id="wa-btn" href="#" target="_blank" class="btn" style="flex:1;min-width:200px;background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);text-align:center">💬 Chat on WhatsApp</a>
+    </div>
+    <p id="book-msg" style="display:none;color:#1a7d3c;margin-top:14px;font-weight:600"></p>
+  </form>
+</div>
+
+<!-- FLEET -->
+<section id="fleet">
+  <div class="container">
+    <h2>Our Popular Fleet</h2>
+    <p class="sub">From budget-friendly economy cars to premium SUVs — find the right vehicle at the right price.</p>
+    <div class="fleet-grid">
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1623869675781-80aa31012a5a?w=800&q=80&auto=format&fit=crop" alt="Toyota Corolla" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚗'"></div>
+        <div class="car-body">
+          <h4>Toyota Corolla</h4>
+          <div class="car-tag">Economy · Great on fuel</div>
+          <div class="car-specs"><span>⛽ 45 mpg</span><span>👤 5 seats</span><span>⚙️ Auto</span></div>
+          <div class="car-price"><b>$39<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1707070182914-fb69f596c98e?w=800&q=80&auto=format&fit=crop" alt="Honda CR-V SUV" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚙'"></div>
+        <div class="car-body">
+          <h4>Honda CR-V</h4>
+          <div class="car-tag">SUV · Family favorite</div>
+          <div class="car-specs"><span>⛽ 32 mpg</span><span>👤 5 seats</span><span>🧳 Large boot</span></div>
+          <div class="car-price"><b>$65<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1621979787123-daf3ba3187e2?w=800&q=80&auto=format&fit=crop" alt="BMW 5 Series luxury sedan" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🏎️'"></div>
+        <div class="car-body">
+          <h4>BMW 5 Series</h4>
+          <div class="car-tag">Luxury · Premium comfort</div>
+          <div class="car-specs"><span>⚡ Turbo</span><span>👤 5 seats</span><span>🛋️ Leather</span></div>
+          <div class="car-price"><b>$129<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1521014710171-f44dfe788ece?w=800&q=80&auto=format&fit=crop" alt="Toyota HiAce van" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚐'"></div>
+        <div class="car-body">
+          <h4>Toyota HiAce</h4>
+          <div class="car-tag">Van · Groups & cargo</div>
+          <div class="car-specs"><span>👤 12 seats</span><span>🧳 Extra space</span><span>⚙️ Manual</span></div>
+          <div class="car-price"><b>$89<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1638618164682-12b986ec2a75?w=800&q=80&auto=format&fit=crop" alt="Hyundai Accent compact car" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚗'"></div>
+        <div class="car-body">
+          <h4>Hyundai Accent</h4>
+          <div class="car-tag">Economy · Budget-friendly</div>
+          <div class="car-specs"><span>⛽ 42 mpg</span><span>👤 5 seats</span><span>⚙️ Auto</span></div>
+          <div class="car-price"><b>$34<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1623597780975-38ccd5030c83?w=800&q=80&auto=format&fit=crop" alt="Ford Everest 4x4 SUV" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚙'"></div>
+        <div class="car-body">
+          <h4>Ford Everest</h4>
+          <div class="car-tag">SUV · 7-seater 4x4</div>
+          <div class="car-specs"><span>🛣️ 4x4</span><span>👤 7 seats</span><span>🧳 Large boot</span></div>
+          <div class="car-price"><b>$79<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&q=80&auto=format&fit=crop" alt="Mercedes-Benz C-Class" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🏎️'"></div>
+        <div class="car-body">
+          <h4>Mercedes-Benz C-Class</h4>
+          <div class="car-tag">Luxury · Executive ride</div>
+          <div class="car-specs"><span>⚡ Turbo</span><span>👤 5 seats</span><span>🛋️ Premium</span></div>
+          <div class="car-price"><b>$139<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+      <div class="car">
+        <div class="car-img"><img src="https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80&auto=format&fit=crop" alt="Tesla Model 3 electric car" loading="lazy" onerror="var p=this.parentElement;p.classList.add('fb');p.textContent='🚘'"></div>
+        <div class="car-body">
+          <h4>Tesla Model 3</h4>
+          <div class="car-tag">Electric · Zero emissions</div>
+          <div class="car-specs"><span>🔋 Electric</span><span>👤 5 seats</span><span>📱 Autopilot</span></div>
+          <div class="car-price"><b>$99<small>/day</small></b><a href="#book" class="btn nav-cta">Book</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US / FEATURES -->
+<section class="features" id="why">
+  <div class="container">
+    <h2>Why Choose DriveEasy</h2>
+    <p class="sub">We make renting simple, fair, and stress-free.</p>
+    <div class="feat-grid">
+      <div class="feat"><div class="ico">💸</div><h4>No Hidden Fees</h4><p>The price you see is the price you pay. Always transparent.</p></div>
+      <div class="feat"><div class="ico">🔄</div><h4>Free Cancellation</h4><p>Plans change. Cancel up to 48 hours before pick-up, free.</p></div>
+      <div class="feat"><div class="ico">🛟</div><h4>24/7 Assistance</h4><p>Roadside support whenever and wherever you need it.</p></div>
+      <div class="feat"><div class="ico">⚡</div><h4>Instant Booking</h4><p>Confirm your car in under 2 minutes. No paperwork hassle.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <h2>How It Works</h2>
+    <p class="sub">Three simple steps to get you on the road.</p>
+    <div class="steps-grid">
+      <div class="step"><div class="num">1</div><h4>Choose Your Car</h4><p>Browse our fleet and pick the vehicle that fits your trip and budget.</p></div>
+      <div class="step"><div class="num">2</div><h4>Book in Minutes</h4><p>Enter your dates and details. Get instant confirmation by email.</p></div>
+      <div class="step"><div class="num">3</div><h4>Pick Up & Drive</h4><p>Collect your car at the agreed location and enjoy the journey.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="reviews">
+  <div class="container">
+    <h2>What Our Customers Say</h2>
+    <p class="sub" style="color:#aebccb">Trusted by over 50,000 drivers worldwide.</p>
+    <div class="testi-grid">
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"Booking took two minutes and the car was spotless. Best rental experience I've had."</p>
+        <div class="who"><div class="av">SM</div><div><b>Sarah M.</b><small>Business traveler</small></div></div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"No surprise charges at the desk. What they quoted is exactly what I paid. Refreshing!"</p>
+        <div class="who"><div class="av">DK</div><div><b>David K.</b><small>Family vacation</small></div></div>
+      </div>
+      <div class="quote">
+        <div class="stars">★★★★★</div>
+        <p>"My flight was delayed and they held the car with zero fuss. Customer service is top tier."</p>
+        <div class="who"><div class="av">AL</div><div><b>Aisha L.</b><small>Frequent renter</small></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <h2>Ready to Hit the Road?</h2>
+    <p>Reserve your car today and get 15% off your first rental with code <b>DRIVE15</b>.</p>
+    <a href="#book" class="btn">Book Your Car Now</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="logo" style="margin-bottom:12px">🚗 Drive<span>Easy</span></div>
+        <p style="font-size:14px">Premium car rentals made simple. Drive more, worry less.</p>
+      </div>
+      <div><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#">Careers</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div><h5>Support</h5><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact</a></li><li><a href="#">Terms</a></li></ul></div>
+      <div><h5>Get in Touch</h5><ul><li>📞 1-800-DRIVE-EZ</li><li>✉️ hello@driveeasy.com</li><li>📍 Available in 40+ cities</li></ul></div>
+    </div>
+    <div class="foot-bottom">© 2026 DriveEasy Car Rentals. All rights reserved. · This is a sample landing page.<br>
+      <span style="color:var(--accent2);font-weight:600">Prepared by Jalal Antonio — Virtual Assistant · lalstyles1991@gmail.com · +63 991 008 2517</span></div>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP CHAT BUTTON -->
+<a href="https://wa.me/639910082517" target="_blank" title="Chat with us on WhatsApp"
+   style="position:fixed;bottom:24px;right:24px;z-index:200;background:#25D366;color:#fff;
+   width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+   font-size:30px;box-shadow:0 6px 20px rgba(0,0,0,.3);text-decoration:none">💬</a>
+
+<script>
+// Your WhatsApp number (international format, no + or spaces)
+var WHATSAPP_NUMBER = "639910082517";
+
+function bookNow(e){
+  e.preventDefault();
+  var f = e.target;
+  var d = {
+    name: f.name.value, email: f.email.value, phone: f.phone.value,
+    location: f.location.value, pickup: f.pickup.value, ret: f.return.value,
+    vehicle: f.vehicle.value, message: f.message.value
+  };
+  var m = document.getElementById('book-msg');
+
+  // 1) Save the booking to your Formspree dashboard + email it to you
+  fetch(f.action, {
+    method: "POST",
+    body: new FormData(f),
+    headers: { "Accept": "application/json" }
+  })
+  .then(function(r){
+    if(r.ok){
+      m.style.display='block';
+      m.innerHTML = "✅ Thanks, " + d.name + "! Your booking request has been received. " +
+        "We'll confirm by email at " + d.email + ". " +
+        "<br>Prefer to chat now? <a href='https://wa.me/" + WHATSAPP_NUMBER +
+        "' target='_blank' style='color:#25D366;font-weight:700'>Message us on WhatsApp →</a>";
+      f.reset();
+    } else {
+      m.style.display='block';
+      m.style.color='#c0392b';
+      m.textContent = "Sorry, something went wrong. Please try again or message us on WhatsApp.";
+    }
+    m.scrollIntoView({behavior:'smooth',block:'center'});
+  })
+  .catch(function(){
+    m.style.display='block';
+    m.style.color='#c0392b';
+    m.textContent = "Network issue — please message us on WhatsApp instead.";
+    m.scrollIntoView({behavior:'smooth',block:'center'});
+  });
+}
+
+// Make the WhatsApp button in the form open a general chat too
+document.getElementById('wa-btn').href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=Hi%2C%20I%27d%20like%20to%20rent%20a%20car";
+</script>
+</body>
+</html>
